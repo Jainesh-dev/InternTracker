@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Internships from "./pages/Internships";
 import InternshipDetail from "./pages/InternshipDetail";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => {
               path="/internships/:id"
               element={<InternshipDetail />}
             />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
