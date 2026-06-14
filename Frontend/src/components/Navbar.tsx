@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
-  Search, Menu, X, Rocket, Sun, Moon, Bell, User, 
-  Bookmark, LayoutDashboard, Settings, History, Upload, LogOut 
+  Search,  Rocket, Sun, Moon, Bell, User, 
+  Bookmark, LayoutDashboard, History, Upload, LogOut 
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { internships } from "../data/internships";
@@ -19,7 +19,6 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
   const [openProfile, setOpenProfile] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
-
   const profileRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -85,14 +84,40 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
                 onChange={(e) => onSearchChange(e.target.value)}
                 className={`w-full pl-12 pr-4 py-4 bg-transparent outline-none text-lg ${isDark ? "text-white placeholder:text-zinc-600" : "text-black placeholder:text-zinc-400"}`}
               />
-              <button onClick={() => setIsSearchOpen(false)} className="px-4 py-1.5 text-xs font-semibold rounded-xl bg-zinc-200/50 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-all active:scale-95">ESC</button>
+              <button
+                      onClick={() => setIsSearchOpen(false)}
+                      className={`px-4 py-1.5 text-xs font-semibold rounded-xl transition-all ${
+                        isDark
+                          ? "bg-zinc-800 text-zinc-300 hover:text-white"
+                          : "bg-zinc-200/50 text-zinc-500 hover:text-zinc-900"
+                      }`}
+                    >
+                      ESC
+                    </button>
             </div>
             <div className="mt-2 max-h-[400px] overflow-y-auto">
               {filteredInternships.length > 0 ? (
                 filteredInternships.map((internship) => (
-                  <button key={internship.id} onClick={() => { navigate(`/internships/${internship.id}`); setIsSearchOpen(false); }} className="w-full text-left px-4 py-3 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 transition-all">
-                    <div className="font-semibold">{internship.company}</div>
-                    <div className="text-sm text-zinc-500">{internship.role}</div>
+                  <button key={internship.id} onClick={() => { navigate(`/internships/${internship.id}`); setIsSearchOpen(false); }} className={`w-full text-left px-4 py-3 rounded-2xl transition-all ${
+  isDark
+    ? "hover:bg-white/5"
+    : "hover:bg-black/5"
+}`}>
+                   <div
+                    className={`font-semibold ${
+                      isDark ? "text-white" : "text-black"
+                    }`}
+                  >
+                    {internship.company}
+                  </div>
+
+                  <div
+                    className={`text-sm ${
+                      isDark ? "text-zinc-400" : "text-zinc-500"
+                    }`}
+                  >
+                    {internship.role}
+                  </div>
                   </button>
                 ))
               ) : (
@@ -132,10 +157,26 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
 
             {openProfile && (
               <div className={`absolute top-20 right-6 w-56 rounded-3xl shadow-2xl backdrop-blur-2xl border p-2 z-50 ${isDark ? "bg-black/80 border-white/10" : "bg-white/90 border-black/10"}`}>
-                <button onClick={() => { navigate("/dashboard"); setOpenProfile(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl hover:bg-black/5 dark:hover:bg-white/10"><LayoutDashboard className="h-4 w-4 text-purple-500" /> Dashboard</button>
-                <button onClick={() => { navigate("/saved"); setOpenProfile(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl hover:bg-black/5 dark:hover:bg-white/10"><Bookmark className="h-4 w-4 text-blue-500" /> Saved</button>
-                <button onClick={() => { navigate("/history"); setOpenProfile(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl hover:bg-black/5 dark:hover:bg-white/10"><History className="h-4 w-4 text-orange-500" /> History</button>
-                <button onClick={() => fileInputRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl hover:bg-black/5 dark:hover:bg-white/10"><Upload className="h-4 w-4 text-emerald-500" /> Resume Vault</button>
+                <button onClick={() => { navigate("/dashboard"); setOpenProfile(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-colors ${
+  isDark
+    ? "text-white hover:bg-white/10"
+    : "text-black hover:bg-black/5"
+}`}><LayoutDashboard className="h-4 w-4 text-purple-500" /> Dashboard</button>
+                <button onClick={() => { navigate("/saved"); setOpenProfile(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-colors ${
+  isDark
+    ? "text-white hover:bg-white/10"
+    : "text-black hover:bg-black/5"
+}`}><Bookmark className="h-4 w-4 text-blue-500" /> Saved</button>
+                <button onClick={() => { navigate("/history"); setOpenProfile(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-colors ${
+  isDark
+    ? "text-white hover:bg-white/10"
+    : "text-black hover:bg-black/5"
+}`}><History className="h-4 w-4 text-orange-500" /> History</button>
+                <button onClick={() => fileInputRef.current?.click()} className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-colors ${
+  isDark
+    ? "text-white hover:bg-white/10"
+    : "text-black hover:bg-black/5"
+}`}><Upload className="h-4 w-4 text-emerald-500" /> Resume Vault</button>
                 <input type="file" ref={fileInputRef} onChange={handleResumeUpload} className="hidden" />
                 <div className="border-t border-black/10 dark:border-white/10 my-1" />
                 <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 rounded-xl hover:bg-red-500/10"><LogOut className="h-4 w-4" /> Sign Out</button>

@@ -18,8 +18,16 @@ interface Activity {
   title: string;
   subtitle: string;
 }
+interface HistoryProps {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
 
-export default function History() {
+function History({
+  isDark,
+  toggleTheme,
+}: HistoryProps) {
+
   const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [filter, setFilter] = useState<"All" | ActivityType>("All");
@@ -373,3 +381,4 @@ function MilestoneCard({ icon: Icon, color, bg, title, subtitle }: any) {
     </div>
   );
 }
+export default History; 

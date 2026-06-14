@@ -8,20 +8,68 @@ import NotFound from "./pages/NotFound";
 import Internships from "./pages/Internships";
 import InternshipDetail from "./pages/InternshipDetail";
 import Dashboard from "./pages/Dashboard";
+import LoadingScreen from "./components/LoadingScreen";
 
 const queryClient = new QueryClient();
 
+
 const App = () => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme) {
+    return savedTheme === "dark";
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+});
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+      const root = document.documentElement;
+
+      if (isDark) {
+        root.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        root.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+    }, [isDark]);
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDark) root.classList.add("dark");
-    else root.classList.remove("dark");
-  }, [isDark]);
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 2000);
+  return () => clearTimeout(timer);
+}, []);
+
+useEffect(() => {
+  const mediaQuery = window.matchMedia(
+    "(prefers-color-scheme: dark)"
+  );
+
+  const handleThemeChange = (
+    e: MediaQueryListEvent
+  ) => {
+    setIsDark(e.matches);
+  };
+
+  mediaQuery.addEventListener(
+    "change",
+    handleThemeChange
+  );
+
+  return () =>
+    mediaQuery.removeEventListener(
+      "change",
+      handleThemeChange
+    );
+}, []);
 
   const toggleTheme = () => setIsDark((prev) => !prev);
-
+  if (loading) {
+  return <LoadingScreen isDark={isDark} />;
+}
   return (
     <QueryClientProvider client={queryClient}>
       <div
@@ -42,13 +90,9 @@ const App = () => {
               }
               
             />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/history" element={<History />} />
-            <Route
-              path="/internships/:id"
-              element={<InternshipDetail />}
-            />
-            <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/saved" element={<Saved />} />
+           <Route path="/history" element={<History />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
