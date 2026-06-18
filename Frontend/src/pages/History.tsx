@@ -129,7 +129,12 @@ function History({
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#09090B] pb-24 selection:bg-blue-500/30 font-sans overflow-x-hidden">
-      <Navbar isDark={false} toggleTheme={() => {}} searchQuery="" onSearchChange={() => {}} />
+      <Navbar
+  isDark={isDark}
+  toggleTheme={toggleTheme}
+  searchQuery=""
+  onSearchChange={() => {}}
+/>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-36">
         

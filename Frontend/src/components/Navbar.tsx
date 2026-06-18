@@ -151,7 +151,11 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
 
             <button onClick={() => setOpenProfile(!openProfile)} className="p-2 rounded-full transition-colors">
               <div className={`w-9 h-9 rounded-full border flex items-center justify-center ${isDark ? "bg-white/5 border-white/20" : "bg-gray-100 border-gray-300"}`}>
-                <User className="h-5 w-5" />
+                <User
+  className={`h-5 w-5 ${
+    isDark ? "text-white" : "text-black"
+  }`}
+/>
               </div>
             </button>
 

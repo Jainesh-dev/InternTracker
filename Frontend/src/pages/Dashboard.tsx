@@ -6,22 +6,17 @@ import {
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-export default function Dashboard() {
+interface DashboardProps {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
+export default function Dashboard({
+  isDark,
+  toggleTheme,
+}: DashboardProps)  {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isDark, setIsDark] = useState(() => {
-  const savedTheme = localStorage.getItem("theme");
-
-  if (savedTheme) {
-    return savedTheme === "dark";
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-});
-
-  const toggleTheme = () => {
-    setIsDark((prev) => !prev);
-  };
 
   return (
     <>

@@ -7,13 +7,22 @@ import InternshipCard from "../components/InternshipCard";
 import InternshipCardSkeleton from "../components/InternshipCardSkeleton";
 import EmptyState from "../components/EmptyState";
 
+interface InternshipsProps {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
 export interface Filters {
   location: string;
   category: string;
   workType: string;
 }
 
-const Internships = () => {
+const Internships = ({
+  isDark,
+  toggleTheme,
+}: InternshipsProps) => {
+  
   const navigate = useNavigate();
   const filterRef = useRef<HTMLDivElement>(null);
   

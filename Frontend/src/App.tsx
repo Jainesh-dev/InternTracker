@@ -90,9 +90,35 @@ useEffect(() => {
               }
               
             />
-           <Route path="/dashboard" element={<Dashboard />} />
-           <Route path="/saved" element={<Saved />} />
-           <Route path="/history" element={<History />} />
+           <Route
+  path="/dashboard"
+  element={
+    <Dashboard
+      isDark={isDark}
+      toggleTheme={toggleTheme}
+    />
+  }
+/>
+
+<Route
+  path="/saved"
+  element={
+    <Saved
+      isDark={isDark}
+      toggleTheme={toggleTheme}
+    />
+  }
+/>
+
+<Route
+  path="/history"
+  element={
+    <History
+      isDark={isDark}
+      toggleTheme={toggleTheme}
+    />
+  }
+/>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

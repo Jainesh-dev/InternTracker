@@ -7,7 +7,15 @@ import Navbar from "../components/Navbar";
 import InternshipCard from "../components/InternshipCard";
 import { internships, Internship } from "../data/internships";
 
-export default function Saved() {
+interface SavedProps {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
+export default function Saved({
+  isDark,
+  toggleTheme,
+}: SavedProps) {
   const navigate = useNavigate();
   const [savedInternships, setSavedInternships] = useState<Internship[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +60,12 @@ export default function Saved() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#09090B] pb-24 selection:bg-blue-500/30 overflow-x-hidden">
       
-      <Navbar isDark={false} toggleTheme={() => {}} searchQuery="" onSearchChange={() => {}} />
+      <Navbar
+  isDark={isDark}
+  toggleTheme={toggleTheme}
+  searchQuery=""
+  onSearchChange={() => {}}
+/>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-36">
         
