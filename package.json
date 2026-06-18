@@ -1,1 +1,6 @@
-{}
+{
+  "name": "InternTracker",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {}
+}

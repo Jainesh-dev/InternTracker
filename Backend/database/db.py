@@ -1,4 +1,5 @@
 import psycopg2
+import bcrypt
 
 def get_db_connection():
     return psycopg2.connect(
@@ -146,6 +147,11 @@ def create_user(name, email, password):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    hashed_password = bcrypt.hashpw(
+        password.encode("utf-8"),
+        bcrypt.gensalt()
+    )
+
     try:
         cursor.execute(
             """
@@ -153,7 +159,11 @@ def create_user(name, email, password):
             (name, email, password)
             VALUES (%s, %s, %s)
             """,
-            (name, email, password)
+            (
+                name,
+                email,
+                hashed_password.decode("utf-8")
+            )
         )
 
         conn.commit()
@@ -172,6 +182,7 @@ def create_user(name, email, password):
     finally:
         cursor.close()
         conn.close()
+        
 def get_user_by_email(email):
     conn = get_db_connection()
     cursor = conn.cursor()
