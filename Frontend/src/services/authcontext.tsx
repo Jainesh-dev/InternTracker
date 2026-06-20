@@ -43,9 +43,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const login = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem('it_auth', 'true');
-  };
+  setIsAuthenticated(true);
+
+  const savedUser = localStorage.getItem("it_user");
+
+  if (savedUser) {
+    setUser(JSON.parse(savedUser));
+    setOnboardingCompleted(true);
+  }
+
+  localStorage.setItem("it_auth", "true");
+};
 
   const signup = () => {
     setIsAuthenticated(true);
@@ -61,11 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setIsAuthenticated(false);
-    setOnboardingCompleted(false);
-    setUser(null);
     localStorage.removeItem('it_auth');
-    localStorage.removeItem('it_onboarding_complete');
-    localStorage.removeItem('it_user');
   };
 
   return (

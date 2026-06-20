@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { internships } from "../data/internships";
+import { useAuth } from "@/services/authcontext";
 
 interface NavbarProps {
   isDark: boolean;
@@ -19,6 +20,7 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
   const [openProfile, setOpenProfile] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const profileRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -53,7 +55,11 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
     };
     reader.readAsDataURL(file);
   };
-
+  const handleLogout = () => {
+  logout();
+  setOpenProfile(false);
+  navigate("/auth");
+};
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 100);
     window.addEventListener("scroll", handleScroll);
@@ -131,7 +137,7 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
       {/* NAV CONTENT */}
       <nav className={`fixed top-0 w-full z-[100] transition-all duration-700 ${scrolled ? (isDark ? "py-3 bg-black/40 backdrop-blur-3xl border-b border-white/10 shadow-2xl" : "py-3 bg-white/40 backdrop-blur-3xl border-b border-black/[0.05] shadow-lg") : "py-6 bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-          <div onClick={() => navigate("/")} className="flex items-center gap-3 cursor-pointer group shrink-0">
+          <div onClick={() => navigate("/home")} className="flex items-center gap-3 cursor-pointer group shrink-0">
             <div className={`p-2 rounded-[14px] transition-all shadow-lg ${isDark ? "bg-white text-black" : "bg-black text-white"}`}>
               <Rocket className="h-5 w-5" />
             </div>
@@ -183,7 +189,13 @@ const Navbar = ({ isDark, toggleTheme, searchQuery, onSearchChange }: NavbarProp
 }`}><Upload className="h-4 w-4 text-emerald-500" /> Resume Vault</button>
                 <input type="file" ref={fileInputRef} onChange={handleResumeUpload} className="hidden" />
                 <div className="border-t border-black/10 dark:border-white/10 my-1" />
-                <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 rounded-xl hover:bg-red-500/10"><LogOut className="h-4 w-4" /> Sign Out</button>
+               <button
+  onClick={handleLogout}
+  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 rounded-xl hover:bg-red-500/10"
+>
+  <LogOut className="h-4 w-4" />
+  Sign Out
+</button>
               </div>
             )}
           </div>

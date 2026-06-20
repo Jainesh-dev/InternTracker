@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth, UserProfile } from '@/services/authcontext';
-import { OnboardingStepper } from '@/components/OnboardingStepper';
-import { InterestChip } from '@/components/InterestChip';
+import {OnboardingStepper}  from '@/components/OnboardingStepper';
+import {InterestChip}  from '@/components/InterestChip';
 import { SkillChip } from '@/components/SkillChip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -85,13 +85,63 @@ export const Onboarding: React.FC = () => {
     updateField('locations', (formData.locations || []).filter(l => l !== loc));
   };
 
-  const handleNext = () => {
-    if (step < 5) setStep(step + 1);
-    else {
-      completeOnboarding(formData as UserProfile);
-      navigate('/recommendations');
+      const handleNext = () => {
+  // Step 1 Validation
+  if (step === 1) {
+    if (
+      !formData.firstName?.trim() ||
+      !formData.lastName?.trim() ||
+      !formData.dob
+    ) {
+      alert("Please fill all personal details.");
+      return;
     }
-  };
+  }
+
+  // Step 2 Validation
+  if (step === 2) {
+    if (
+      !formData.collegeName?.trim() ||
+      !formData.degree?.trim() ||
+      !formData.branch?.trim() ||
+      !formData.gradYear?.trim() ||
+      !formData.cgpa?.trim()
+    ) {
+      alert("Please complete your academic details.");
+      return;
+    }
+  }
+
+  // Step 3 Validation
+  if (step === 3) {
+    if ((formData.interests?.length ?? 0) === 0) {
+      alert("Please select at least one interest.");
+      return;
+    }
+  }
+
+  // Step 4 Validation
+  if (step === 4) {
+    if ((formData.skills?.length ?? 0) === 0) {
+      alert("Please add at least one skill.");
+      return;
+    }
+  }
+
+  // Step 5 Validation
+  if (step === 5) {
+    if ((formData.locations?.length ?? 0) === 0) {
+      alert("Please add at least one preferred location.");
+      return;
+    }
+
+    completeOnboarding(formData as UserProfile);
+    navigate("/recommendations");
+    return;
+  }
+
+  setStep(step + 1);
+};
 
   const handleBack = () => {
     if (step > 1) setStep(step - 1);

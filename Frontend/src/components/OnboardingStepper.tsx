@@ -1,5 +1,4 @@
 import React from 'react';
-
 interface OnboardingStepperProps {
   currentStep: number;
   totalSteps: number;

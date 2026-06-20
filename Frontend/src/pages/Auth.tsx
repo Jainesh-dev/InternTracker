@@ -6,13 +6,20 @@ import { useAuth } from '@/services/authcontext';
 import { ShieldCheck, Zap, Terminal } from 'lucide-react';
 
 export const Auth: React.FC = () => {
-  const { login } = useAuth();
+  const { login ,signup } = useAuth();
   const navigate = useNavigate();
 
-  const handleAuthSuccess = () => {
+  const handleAuthSuccess = (
+  isNewUser: boolean
+) => {
+  if (isNewUser) {
+    signup();
+    navigate("/onboarding");
+  } else {
     login();
-    navigate('/onboarding');
-  };
+    navigate("/home");
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#0A0A0C] text-white flex flex-col md:flex-row items-center justify-center p-6 md:p-0 overflow-hidden relative">

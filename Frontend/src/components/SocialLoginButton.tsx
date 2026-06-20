@@ -5,8 +5,9 @@ interface SocialLoginButtonProps {
   provider: 'Google' | 'Microsoft' | 'Apple';
   onClick: () => void;
 }
-
-export const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ provider, onClick }) => {
+export const SocialLoginButton: React.FC<
+  SocialLoginButtonProps
+> = ({ provider, onClick }) => {
   const getIcon = () => {
     switch (provider) {
       case 'Google':

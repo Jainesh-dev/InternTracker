@@ -6,6 +6,7 @@ import { RecommendationCard, RecommendedInternship } from '@/components/Recommen
 import { Button } from '@/components/ui/button';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
+
 const MOCK_RECOMMENDATIONS: RecommendedInternship[] = [
   { id: 'rec-1', title: 'Software Engineering Intern', company: 'Linear', location: 'Remote', type: 'Remote', matchScore: 98 },
   { id: 'rec-2', title: 'Data Analytics Intern', company: 'Vercel', location: 'New York, NY', type: 'Hybrid', matchScore: 94 },
@@ -73,7 +74,7 @@ export const Recommendations: React.FC = () => {
             Explore All Recommendations
           </Button>
           <Button 
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/home')}
             className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 group"
           >
             Continue to Command Center

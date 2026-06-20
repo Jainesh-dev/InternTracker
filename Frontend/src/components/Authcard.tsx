@@ -6,7 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface AuthCardProps {
-  onSuccess: () => void;
+  onSuccess: (
+    isNewUser: boolean
+  ) => void;
 }
 
 export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
@@ -17,7 +19,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email && password) {
-      onSuccess();
+  onSuccess(!isLogin);
     }
   };
 
@@ -34,9 +36,20 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
       </p>
 
       <div className="space-y-3 mb-6">
-        <SocialLoginButton provider="Google" onClick={onSuccess} />
-        <SocialLoginButton provider="Apple" onClick={onSuccess} />
-        <SocialLoginButton provider="Microsoft" onClick={onSuccess} />
+      <SocialLoginButton
+          provider="Google"
+          onClick={() => onSuccess(false)}
+        />
+
+        <SocialLoginButton
+          provider="Apple"
+          onClick={() => onSuccess(false)}
+        />
+
+        <SocialLoginButton
+          provider="Microsoft"
+          onClick={() => onSuccess(false)}
+        />
       </div>
 
       <div className="relative my-6 flex py-1 items-center">

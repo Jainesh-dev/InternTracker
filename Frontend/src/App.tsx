@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "./services/authcontext";
-
+import Index from "./pages/Index"
 // Existing Pages
 import Saved from "./pages/Saved";
 import History from "./pages/History";
@@ -105,7 +105,30 @@ const AppContent = () => {
           {/* Initial Route */}
           <Route
             path="/"
-            element={<Navigate to="/auth" replace />}
+            element={
+              <Navigate
+                to={
+                  localStorage.getItem("it_auth")
+                    ? "/home"
+                    : "/auth"
+                }
+                replace
+              />
+            }
+          />
+
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+              <OnboardingGuard>
+              <Index
+                isDark={isDark}
+                toggleTheme={toggleTheme}
+              />
+              </OnboardingGuard>  
+              </ProtectedRoute>
+            }
           />
 
           {/* Authentication */}
