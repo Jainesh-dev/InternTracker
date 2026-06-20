@@ -46,17 +46,17 @@ def get_saved_internships():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT
-            internships.id,
-            internships.company,
-            internships.role,
-            internships.location,
-            internships.type,
-            internships.category,
-            internships.applylink
-        FROM saved_internships
-        JOIN internships
-        ON saved_internships.internship_id = internships.id
+    SELECT
+        internships.id,
+        internships.company,
+        internships.role,
+        internships.location,
+        internships.work_type,
+        internships.category,
+        internships.apply_link
+    FROM saved_internships
+    JOIN internships
+    ON saved_internships.internship_id = internships.id
     """)
 
     rows = cursor.fetchall()

@@ -1,3 +1,7 @@
+import bcrypt
+import jwt
+from datetime import datetime, timedelta
+from flask import current_app
 from database.db import (
     get_all_internships,
     save_internship,
@@ -106,15 +110,29 @@ def login_user(email, password):
             "message": "User not found"
         }
 
-    if user[3] != password:
+    if not bcrypt.checkpw(
+        password.encode("utf-8"),
+        user[3].encode("utf-8")
+    ):
         return {
             "success": False,
             "message": "Invalid password"
         }
 
+    token = jwt.encode(
+        {
+            "user_id": user[0],
+            "email": user[2],
+            "exp": datetime.utcnow() + timedelta(hours=24)
+        },
+        current_app.config["SECRET_KEY"],
+        algorithm="HS256"
+    )
+
     return {
         "success": True,
         "message": "Login successful",
+        "token": token,
         "user": {
             "id": user[0],
             "name": user[1],

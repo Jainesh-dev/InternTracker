@@ -4,7 +4,8 @@ from flask_cors import CORS
 from routes.internships import internship_bp
 
 app = Flask(__name__)
-CORS(app)
+app.config["SECRET_KEY"] = "interntracker-secret-key"
+CORS(app)    
 
 app.register_blueprint(internship_bp)
 
@@ -17,3 +18,4 @@ def home():
 if __name__ == "__main__":
     print("🚀 Backend Running on Port 5001")
     app.run(debug=True, port=5001)
+

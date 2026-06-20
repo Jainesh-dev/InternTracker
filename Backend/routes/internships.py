@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify , request
-
+from middleware.auth import token_required
 from services.internship_service import (
     fetch_internships,
     add_saved_internship,
@@ -42,6 +42,7 @@ def save_job(id):
 
 # NEW ROUTE
 @internship_bp.route("/saved", methods=["GET"])
+@token_required
 def get_saved_jobs():
     return jsonify(fetch_saved_internships())
 
@@ -54,6 +55,7 @@ def apply_job(id):
     return jsonify(add_application(id))
 
 @internship_bp.route("/applications", methods=["GET"])
+@token_required
 def get_applications():
     return jsonify(fetch_applications())
 

@@ -1,3 +1,4 @@
+from middleware.auth import token_required
 internships = [
     {
         "id": 1,
