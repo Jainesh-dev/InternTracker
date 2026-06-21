@@ -2,5 +2,8 @@
   "name": "InternTracker",
   "lockfileVersion": 3,
   "requires": true,
-  "packages": {}
+  "packages": {},
+  "dependencies": {
+    "@react-oauth/google": "^0.13.5"
+  }
 }

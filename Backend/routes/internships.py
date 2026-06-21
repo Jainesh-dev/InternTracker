@@ -9,11 +9,21 @@ from services.internship_service import (
     fetch_applications,
     update_application,
     register_user,
-    login_user
+    login_user,
+    login_google_user
 )
 
 internship_bp = Blueprint("internships", __name__)
 
+@internship_bp.route("/auth/google", methods=["POST"])
+def google_login():
+    data = request.get_json()
+
+    token = data.get("token")
+
+    return jsonify(
+        login_google_user(token)
+    )
 
 @internship_bp.route("/internships", methods=["GET"])
 def get_internships():

@@ -4,6 +4,9 @@ import { SocialLoginButton } from './SocialLoginButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { GoogleLogin } from "@react-oauth/google";
+
+
 
 interface AuthCardProps {
   onSuccess: (
@@ -36,10 +39,50 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
       </p>
 
       <div className="space-y-3 mb-6">
-      <SocialLoginButton
-          provider="Google"
-          onClick={() => onSuccess(false)}
+          <div className="flex justify-center">
+        <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+            try {
+              const response = await fetch(
+                "http://127.0.0.1:5001/auth/google",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    token: credentialResponse.credential,
+                  }),
+                }
+              );
+
+              const data = await response.json();
+
+              console.log(data);
+
+              if (data.success) {
+                localStorage.setItem(
+                  "token",
+                  data.token
+                );
+
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify(data.user)
+                );
+
+                window.location.href="/"
+                console.log(data);
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+                    onError={() => {
+            console.log("Google Login Failed");
+          }}
         />
+      </div>
 
         <SocialLoginButton
           provider="Apple"

@@ -201,4 +201,38 @@ def get_user_by_email(email):
     cursor.close()
     conn.close()
 
-    return user        
+    return user      
+def create_google_user(name, email):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            """
+            INSERT INTO users
+            (name, email, password)
+            VALUES (%s, %s, %s)
+            """,
+            (
+                name,
+                email,
+                None
+            )
+        )
+
+        conn.commit()
+
+        return {
+            "success": True,
+            "message": "Google user created"
+        }
+
+    except psycopg2.Error:
+        return {
+            "success": False,
+            "message": "Email already exists"
+        }
+
+    finally:
+        cursor.close()
+        conn.close()  
