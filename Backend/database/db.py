@@ -1,14 +1,16 @@
 import psycopg2
 import bcrypt
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 def get_db_connection():
     return psycopg2.connect(
-        host="localhost",
-        database="InternTracker",
-        user="postgres",
-        password="Jp7171810",
+        host=os.getenv("DB_HOST"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
         port="5432"
-    )
+)
 
 
 def get_all_internships():
