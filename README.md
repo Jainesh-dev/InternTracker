@@ -5,10 +5,11 @@ A modern full-stack internship discovery and tracking platform built to help stu
 InternTracker combines a clean Apple-inspired User experience with practical career management tools, allowing Users to discover opportunities, track applications, maintain a resume vault, and monitor their internship journey from a single platform.
 
 ---
+## Currently under work
 
 ## ✨ Features
 
-##Curently under work
+
 
 ### 🔍 Internship Discovery
 
