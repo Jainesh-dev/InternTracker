@@ -15,7 +15,7 @@ const MOCK_RECOMMENDATIONS: RecommendedInternship[] = [
 ];
 
 export const Recommendations: React.FC = () => {
-  const { user } = useAuth();
+  const { User } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -37,7 +37,7 @@ export const Recommendations: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-extrabold tracking-tight"
           >
-            Welcome, {user?.firstName || 'Developer'} 🎉
+            Welcome, {User?.firstName || 'Developer'} 🎉
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 15 }}

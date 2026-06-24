@@ -85,7 +85,7 @@ export const Onboarding: React.FC = () => {
     updateField('locations', (formData.locations || []).filter(l => l !== loc));
   };
 
-      const handleNext = () => {
+      const handleNext = async () => {
   // Step 1 Validation
   if (step === 1) {
     if (
@@ -130,15 +130,39 @@ export const Onboarding: React.FC = () => {
 
   // Step 5 Validation
   if (step === 5) {
-    if ((formData.locations?.length ?? 0) === 0) {
-      alert("Please add at least one preferred location.");
-      return;
-    }
-
-    completeOnboarding(formData as UserProfile);
-    navigate("/recommendations");
+  if ((formData.locations?.length ?? 0) === 0) {
+    alert("Please add at least one preferred location.");
     return;
   }
+
+  const user = JSON.parse(
+    localStorage.getItem("User") || "{}"
+  );
+
+  try {
+    await fetch(
+      "http://127.0.0.1:5001/onboarding/complete",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+        }),
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+
+  completeOnboarding(
+    formData as UserProfile
+  );
+
+  navigate("/recommendations");
+  return;
+}
 
   setStep(step + 1);
 };

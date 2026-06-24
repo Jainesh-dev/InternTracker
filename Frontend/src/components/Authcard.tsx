@@ -19,12 +19,81 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email && password) {
-  onSuccess(!isLogin);
+ const handleSubmit = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
+
+  if (!email || !password) return;
+
+  try {
+    if (isLogin) {
+      // LOGIN
+      const response = await fetch(
+        "http://127.0.0.1:5001/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (data.success) {
+        localStorage.setItem(
+          "token",
+          data.token
+        );
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
+
+        onSuccess(false);
+      } else {
+        alert(data.message);
+      }
+    } else {
+      // REGISTER
+      const response = await fetch(
+        "http://127.0.0.1:5001/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: email.split("@")[0],
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (data.success) {
+        alert("Registration successful!");
+        onSuccess(true);
+      } else {
+        alert(data.message);
+      }
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div className="w-full max-w-md p-8 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl relative overflow-hidden">
@@ -60,20 +129,24 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSuccess }) => {
 
               console.log(data);
 
-              if (data.success) {
-                localStorage.setItem(
-                  "token",
-                  data.token
-                );
+               if (data.success) {
+                  localStorage.setItem(
+                    "token",
+                    data.token
+                  );
 
-                localStorage.setItem(
-                  "user",
-                  JSON.stringify(data.user)
-                );
+                  localStorage.setItem(
+                    "user",
+                    JSON.stringify(data.User)
+                  );
+                  
+                    localStorage.setItem(
+                    "it_onboarding_complete",
+                    String(data.onboarding_completed)
+                  );
 
-                window.location.href="/"
-                console.log(data);
-              }
+                  onSuccess(data.is_new_user);
+                }
             } catch (err) {
               console.error(err);
             }

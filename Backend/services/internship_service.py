@@ -3,6 +3,7 @@ import jwt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
+import os
 from flask import current_app
 from database.db import (
     get_all_internships,
@@ -12,9 +13,10 @@ from database.db import (
     apply_to_internship,
     get_all_applications,
     update_application_status,
-    create_user,
-    create_google_user,
-    get_user_by_email
+    create_User,
+    create_google_User,
+    get_User_by_email,
+    complete_onboarding
 )
 
 def fetch_internships():
@@ -98,22 +100,22 @@ def update_application(application_id, status):
         "message": f"Application status updated to {status}"
     }
 
-def register_user(name, email, password):
-    return create_user(
+def register_User(name, email, password):
+    return create_User(
         name,
         email,
         password
     )
-def login_user(email, password):
-    user = get_user_by_email(email)
+def login_User(email, password):
+    User = get_User_by_email(email)
 
-    if not user:
+    if not User:
         return {
             "success": False,
             "message": "User not found"
         }
     
-    if user[3] is None:
+    if User[3] is None:
         return {
         "success": False,
         "message": "Please login with Google"
@@ -121,7 +123,7 @@ def login_user(email, password):
 
     if not bcrypt.checkpw(
         password.encode("utf-8"),
-        user[3].encode("utf-8")
+        User[3].encode("utf-8")
     ):
         return {
             "success": False,
@@ -130,8 +132,8 @@ def login_user(email, password):
 
     token = jwt.encode(
         {
-            "user_id": user[0],
-            "email": user[2],
+            "User_id": User[0],
+            "email": User[2],
             "exp": datetime.utcnow() + timedelta(hours=24)
         },
         current_app.config["SECRET_KEY"],
@@ -142,39 +144,38 @@ def login_user(email, password):
         "success": True,
         "message": "Login successful",
         "token": token,
-        "user": {
-            "id": user[0],
-            "name": user[1],
-            "email": user[2]
+        "User": {
+            "id": User[0],
+            "name": User[1],
+            "email": User[2]
         }
     }
-def login_google_user(token):
+def login_google_User(token):
     try:
         idinfo = id_token.verify_oauth2_token(
             token,
             requests.Request(),
-            "969415264956-oqhbui7i604adskpldqosjguqd40bkjc.apps.googleusercontent.com",
+            os.getenv("GOOGLE_CLIENT_ID"),
             clock_skew_in_seconds=10
         )
 
         email = idinfo["email"]
         name = idinfo["name"]
 
-        user = get_user_by_email(email)
+        User = get_User_by_email(email)
+        is_new_User=False
 
-        if not user:
-            create_user(
+        if not User:
+            is_new_User=True
+            create_User(
                 name,
                 email,
-                ""
             )
-
-            user = get_user_by_email(email)
-
+            User = get_User_by_email(email)
         jwt_token = jwt.encode(
             {
-                "user_id": user[0],
-                "email": user[2],
+                "User_id": User[0],
+                "email": User[2],
                 "exp": datetime.utcnow() + timedelta(hours=24)
             },
             current_app.config["SECRET_KEY"],
@@ -183,11 +184,13 @@ def login_google_user(token):
 
         return {
             "success": True,
+            "is_new_User":is_new_User,
+            "onboarding_completed":User[4],
             "token": jwt_token,
-            "user": {
-                "id": user[0],
-                "name": user[1],
-                "email": user[2]
+            "User": {
+                "id": User[0],
+                "name": User[1],
+                "email": User[2]
             }
         }
 
@@ -196,3 +199,10 @@ def login_google_user(token):
             "success": False,
             "message": str(e)
         }
+
+def finish_onboarding(user_id):
+    complete_onboarding(user_id)
+    return {
+        "success": True,
+        "message": "Onboarding completed"
+    }

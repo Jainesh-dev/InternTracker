@@ -29,7 +29,7 @@ def token_required(f):
                 algorithms=["HS256"]
             )
 
-            request.user = data
+            request.User = data
 
         except jwt.ExpiredSignatureError:
             return jsonify({

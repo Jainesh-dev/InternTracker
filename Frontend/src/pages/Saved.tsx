@@ -76,7 +76,7 @@ export default function Saved({
               <div className="flex items-center gap-4 sm:gap-5 mb-3">
                 {/* 🔙 MINIMAL BACK BUTTON */}
                 <button
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/home")}
                   className="group flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-90"
                   aria-label="Go back to Home"
                 >

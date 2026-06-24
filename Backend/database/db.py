@@ -7,7 +7,7 @@ def get_db_connection():
     return psycopg2.connect(
         host=os.getenv("DB_HOST"),
         database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
+        user=os.getenv("DB_User"),
         password=os.getenv("DB_PASSWORD"),
         port="5432"
 )
@@ -145,7 +145,7 @@ def update_application_status(application_id, status):
     cursor.close()
     conn.close()  
 
-def create_user(name, email, password):
+def create_User(name, email, password):
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -157,7 +157,7 @@ def create_user(name, email, password):
     try:
         cursor.execute(
             """
-            INSERT INTO users
+            INSERT INTO Users
             (name, email, password)
             VALUES (%s, %s, %s)
             """,
@@ -185,33 +185,56 @@ def create_user(name, email, password):
         cursor.close()
         conn.close()
         
-def get_user_by_email(email):
+def get_User_by_email(email):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         """
-        SELECT id, name, email, password
-        FROM users
-        WHERE email = %s
-        """,
+          SELECT
+            id,
+            name,
+            email,
+            password,
+            onboarding_completed
+        FROM Users
+        WHERE email = %s """,
         (email,)
     )
 
-    user = cursor.fetchone()
+    User = cursor.fetchone()
 
     cursor.close()
     conn.close()
 
-    return user      
-def create_google_user(name, email):
+    return User     
+
+def complete_onboarding(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE Users
+        SET onboarding_completed = TRUE
+        WHERE id = %s
+        """,
+        (user_id,)
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+     
+def create_google_User(name, email):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
         cursor.execute(
             """
-            INSERT INTO users
+            INSERT INTO Users
             (name, email, password)
             VALUES (%s, %s, %s)
             """,
@@ -226,7 +249,7 @@ def create_google_user(name, email):
 
         return {
             "success": True,
-            "message": "Google user created"
+            "message": "Google User created"
         }
 
     except psycopg2.Error:

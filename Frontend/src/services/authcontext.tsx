@@ -18,7 +18,7 @@ export interface UserProfile {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: UserProfile | null;
+  User: UserProfile | null;
   onboardingCompleted: boolean;
   login: () => void;
   signup: () => void;
@@ -30,50 +30,82 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('it_auth') === 'true';
+    return !!localStorage.getItem("token");
   });
   
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(() => {
     return localStorage.getItem('it_onboarding_complete') === 'true';
   });
 
-  const [user, setUser] = useState<UserProfile | null>(() => {
-    const savedUser = localStorage.getItem('it_user');
-    return savedUser ? JSON.parse(savedUser) : null;
+  const [User, setUser] =
+useState<UserProfile | null>(() => {
+  const savedUser =
+    localStorage.getItem(
+      "it_user_profile"
+    );
+
+  return savedUser
+    ? JSON.parse(savedUser)
+    : null;
   });
 
   const login = () => {
   setIsAuthenticated(true);
 
-  const savedUser = localStorage.getItem("it_user");
+  const savedUser = localStorage.getItem("it_user_profile");
 
   if (savedUser) {
     setUser(JSON.parse(savedUser));
-    setOnboardingCompleted(true);
   }
 
-  localStorage.setItem("it_auth", "true");
+  setOnboardingCompleted(
+    localStorage.getItem("it_onboarding_complete") === "true"
+  );
 };
 
   const signup = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('it_auth', 'true');
+    localStorage.setItem('token', 'temp');
   };
 
-  const completeOnboarding = (profile: UserProfile) => {
-    setUser(profile);
-    setOnboardingCompleted(true);
-    localStorage.setItem('it_user', JSON.stringify(profile));
-    localStorage.setItem('it_onboarding_complete', 'true');
-  };
+const completeOnboarding = (
+  profile: UserProfile
+) => {
+  console.log("COMPLETE ONBOARDING CALLED");
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('it_auth');
-  };
+  setUser(profile);
+  setOnboardingCompleted(true);
+
+  localStorage.setItem(
+    "it_user_profile",
+    JSON.stringify(profile)
+  );
+
+  localStorage.setItem(
+    "it_onboarding_complete",
+    "true"
+  );
+
+  console.log(
+    "Saved:",
+    localStorage.getItem(
+      "it_onboarding_complete"
+    )
+  );
+};
+
+
+const logout = () => {
+  setIsAuthenticated(false);
+  setUser(null);
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("User");
+  localStorage.removeItem("it_onboarding_complete");
+};
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, onboardingCompleted, login, signup, completeOnboarding, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, User, onboardingCompleted, login, signup, completeOnboarding, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -136,7 +136,7 @@ const Internships = ({
       {/* 1. PAGE HEADER */}
       <div className="pt-24 md:pt-32 pb-12 px-6 lg:px-8 max-w-7xl mx-auto text-center relative">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/home")}
           className="absolute left-6 lg:left-8 top-24 md:top-32 flex items-center gap-2 text-[15px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors group"
         >
           <div className="p-2 rounded-full bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10 transition-colors">

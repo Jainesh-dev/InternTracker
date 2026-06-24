@@ -105,16 +105,7 @@ const AppContent = () => {
           {/* Initial Route */}
           <Route
             path="/"
-            element={
-              <Navigate
-                to={
-                  localStorage.getItem("it_auth")
-                    ? "/home"
-                    : "/auth"
-                }
-                replace
-              />
-            }
+            element={<Navigate to="/auth" replace /> }
           />
 
           <Route

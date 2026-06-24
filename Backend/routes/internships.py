@@ -8,9 +8,10 @@ from services.internship_service import (
     add_application,
     fetch_applications,
     update_application,
-    register_user,
-    login_user,
-    login_google_user
+    register_User,
+    login_User,
+    login_google_User,
+    finish_onboarding
 )
 
 internship_bp = Blueprint("internships", __name__)
@@ -22,7 +23,7 @@ def google_login():
     token = data.get("token")
 
     return jsonify(
-        login_google_user(token)
+        login_google_User(token)
     )
 
 @internship_bp.route("/internships", methods=["GET"])
@@ -88,7 +89,7 @@ def register():
     password = data.get("password")
 
     return jsonify(
-        register_user(
+        register_User(
             name,
             email,
             password
@@ -102,8 +103,21 @@ def login():
     password = data.get("password")
 
     return jsonify(
-        login_user(
+        login_User(
             email,
             password
         )
+    )
+
+@internship_bp.route(
+    "/onboarding/complete",
+    methods=["POST"]
+)
+def onboarding_complete():
+    data = request.get_json()
+
+    user_id = data.get("user_id")
+
+    return jsonify(
+        finish_onboarding(user_id)
     )

@@ -34,7 +34,7 @@ export default function Dashboard({
           <header className="relative mb-10">
             <div className="flex items-center gap-4 mb-2">
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
                 className="p-2.5 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-all group shrink-0"
                 aria-label="Go back"
               >
