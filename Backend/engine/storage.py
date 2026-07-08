@@ -27,6 +27,12 @@ def save_job(job):
                 company,
                 role,
                 location,
+                work_type,
+                skills,
+                experience,
+                degree,
+                salary,
+                duration,
                 description,
                 apply_link,
                 source,
@@ -34,20 +40,28 @@ def save_job(job):
             )
 
             VALUES
-            (%s,%s,%s,%s,%s,%s,%s)
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
 
             ON CONFLICT (apply_link)
             DO NOTHING
             """,
 
             (
+                (
                 job["company"],
                 job["role"],
                 job["location"],
+                job["work_type"],
+                job["skills"],
+                job["experience"],
+                job["degree"],
+                job["salary"],
+                job["duration"],
                 job["description"],
                 job["apply_link"],
                 job["source"],
                 job["category"]
+                )
             )
         )
 
@@ -58,3 +72,24 @@ def save_job(job):
         cursor.close()
 
         conn.close()
+
+def get_active_companies():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            company_name,
+            ats,
+            slug
+        FROM companies
+        WHERE active = TRUE
+    """)
+
+    companies = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return companies        

@@ -1,7 +1,10 @@
 from classifier import classify
-
+from parser import parse_description
 
 def normalize_greenhouse_job(job):
+    parsed = parse_description(
+    job.get("content","")
+)
 
     normalized_job = {
 
@@ -13,6 +16,18 @@ def normalize_greenhouse_job(job):
             "location",
             {}
         ).get("name", ""),
+
+        "work_type": parsed["work_type"],
+
+        "skills": parsed["skills"],
+
+        "experience": parsed["experience"],
+
+        "degree": parsed["degree"],
+
+        "salary": parsed["salary"],
+
+        "duration": parsed["duration"],
 
         "description": job.get(
             "content",
