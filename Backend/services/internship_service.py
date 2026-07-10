@@ -3,6 +3,10 @@ import jwt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
+from database.db import (
+    save_user_profile,
+    complete_onboarding
+)
 import os
 from flask import current_app
 from database.db import (
@@ -200,9 +204,27 @@ def login_google_User(token):
             "message": str(e)
         }
 
-def finish_onboarding(user_id):
-    complete_onboarding(user_id)
+def finish_onboarding(data):
+
+    print("=" * 50)
+    print("ONBOARDING DATA RECEIVED")
+    print(data)
+    print("=" * 50)
+
+    save_user_profile(
+        data["user_id"],
+        data["college"],
+        data["branch"],
+        data["degree"],
+        data["graduation_year"],
+        data["skills"],
+        data["interests"],
+        data["preferred_locations"]
+    )
+
+    complete_onboarding(data["user_id"])
+
     return {
         "success": True,
-        "message": "Onboarding completed"
+        "message": "Onboarding completed successfully"
     }

@@ -23,40 +23,47 @@ def detect_work_type(description):
 
 def detect_skills(description):
 
-    skills_database = [
-        "Python",
-        "Java",
-        "C++",
-        "C",
-        "JavaScript",
-        "TypeScript",
-        "React",
-        "Node.js",
-        "NodeJS",
-        "SQL",
-        "PostgreSQL",
-        "MongoDB",
-        "AWS",
-        "Azure",
-        "Docker",
-        "Kubernetes",
-        "Git",
-        "TensorFlow",
-        "PyTorch",
-        "Machine Learning"
-    ]
-
-    found = []
+    SKILLS = {
+        "Python": ["python"],
+        "Java": ["java"],
+        "C++": ["c++"],
+        "C": ["c"],
+        "JavaScript": ["javascript", "js"],
+        "TypeScript": ["typescript", "ts"],
+        "React": ["react"],
+        "Node.js": ["nodejs", "node.js", "node js"],
+        "SQL": ["sql"],
+        "PostgreSQL": ["postgresql", "postgres"],
+        "MongoDB": ["mongodb", "mongo"],
+        "AWS": ["aws", "amazon web services"],
+        "Azure": ["azure"],
+        "Docker": ["docker"],
+        "Kubernetes": ["kubernetes", "k8s"],
+        "Git": ["git"],
+        "TensorFlow": ["tensorflow"],
+        "PyTorch": ["pytorch"],
+        "Machine Learning": [
+            "machine learning",
+            "ml"
+        ]
+    }
 
     text = description.lower()
 
-    for skill in skills_database:
+    found = []
 
-        if skill.lower() in text:
-            found.append(skill)
+    for skill, aliases in SKILLS.items():
+
+        for alias in aliases:
+
+            if re.search(
+                rf"\b{re.escape(alias)}\b",
+                text
+            ):
+                found.append(skill)
+                break
 
     return found
-
 
 def detect_experience(description):
 
@@ -140,6 +147,31 @@ def detect_duration(description):
 
     return "Not Specified"
 
+def detect_batch(description):
+
+    text = description.lower()
+
+    patterns = [
+        r'20\d{2}\s*batch',
+        r'20\d{2}\s*graduates?',
+        r'graduating\s*in\s*20\d{2}'
+    ]
+
+    for pattern in patterns:
+
+        match = re.search(pattern, text)
+
+        if match:
+            return match.group()
+
+    if "final year" in text:
+        return "Final Year"
+
+    if "pre-final" in text:
+        return "Pre-final Year"
+
+    return "Not Specified"
+
 
 def parse_description(description):
 
@@ -161,5 +193,7 @@ def parse_description(description):
             detect_salary(description),
 
         "duration":
-            detect_duration(description)
+            detect_duration(description),
+        "batch":
+            detect_batch(description),    
     }

@@ -46,7 +46,6 @@ def save_job(job):
             DO NOTHING
             """,
 
-            (
                 (
                 job["company"],
                 job["role"],
@@ -63,7 +62,7 @@ def save_job(job):
                 job["category"]
                 )
             )
-        )
+
 
         conn.commit()
 
@@ -71,7 +70,7 @@ def save_job(job):
 
         cursor.close()
 
-        conn.close()
+        conn.close()          
 
 def get_active_companies():
 
@@ -93,3 +92,64 @@ def get_active_companies():
     conn.close()
 
     return companies        
+
+def get_all_internships():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            company,
+            role,
+            location,
+            work_type,
+            skills,
+            category,
+            apply_link
+        FROM engine_internships
+    """)
+
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    internships = []
+
+    for row in rows:
+        internships.append({
+            "company": row[0],
+            "role": row[1],
+            "location": row[2],
+            "work_type": row[3],
+            "skills": row[4] or [],
+            "category": row[5],
+            "apply_link": row[6]
+        })
+
+    return internships
+
+def get_user_profile(user_id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            skills,
+            interests,
+            preferred_locations
+        FROM user_profiles
+        WHERE user_id=%s
+        """,
+        (user_id,)
+    )
+
+    profile = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return profile

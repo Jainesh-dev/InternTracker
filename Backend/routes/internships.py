@@ -13,6 +13,9 @@ from services.internship_service import (
     login_google_User,
     finish_onboarding
 )
+from services.recommendation_service import (
+    fetch_recommendations
+)
 
 internship_bp = Blueprint("internships", __name__)
 
@@ -114,10 +117,25 @@ def login():
     methods=["POST"]
 )
 def onboarding_complete():
+
     data = request.get_json()
 
-    user_id = data.get("user_id")
+    print("=" * 60)
+    print("ROUTE RECEIVED:")
+    print(data)
+    print("Keys:", data.keys())
+    print("=" * 60)
 
     return jsonify(
-        finish_onboarding(user_id)
+        finish_onboarding(data)
+    )
+
+@internship_bp.route(
+    "/recommendations/<int:user_id>",
+    methods=["GET"]
+)
+def recommendations(user_id):
+
+    return jsonify(
+        fetch_recommendations(user_id)
     )

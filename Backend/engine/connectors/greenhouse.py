@@ -12,6 +12,7 @@ from logger import (
     log_success,
     log_error
 )
+from skill_extractor import extract_skills   
 
 def fetch_greenhouse_jobs(slug):
 
@@ -56,6 +57,12 @@ def fetch_greenhouse_jobs(slug):
             keyword in title
             for keyword in keywords
         ):
+            description = job.get("content", "")
+
+            skills = extract_skills(description)
+
+            job["skills"] = skills
+
             internships.append(job)
 
     log_success(
@@ -69,7 +76,7 @@ if __name__ == "__main__":
     jobs = fetch_greenhouse_jobs("stripe")
 
     if jobs:
-        print(jobs[0]["company_name"])
         print(jobs[0]["title"])
+        print(jobs[0]["skills"])
     else:
         print("No jobs found.")
